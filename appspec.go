@@ -44,7 +44,7 @@ type Container struct {
 	Links []string
 
 	// Ports to allocate to this container.
-	Ports []PortMapping
+	Ports []Port
 }
 
 type Port struct {
