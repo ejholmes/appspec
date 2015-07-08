@@ -1,0 +1,54 @@
+{
+  "Name": "acme-inc",
+  "Processes": [
+    {
+      "Type": "web",
+      "Instances": 1,
+      "Containers": [
+        {
+          "Name": "web",
+          "Image": "remind101/acme-inc:latest",
+          "Exposure": "public",
+          "Command": ["./bin/web"],
+          "Env": {
+            "RAILS_ENV": "production"
+          },
+          "Memory": 1073741824,
+          "CPU": 1024,
+          "Links": [
+            "statsd"
+          ],
+          "Ports": [
+            {
+              "Host": 8080,
+              "Container": 8080,
+              "Protocol": "tcp"
+            }
+          ]
+        },
+        {
+          "Name": "statsd",
+          "Image": "statsd:latest",
+          "Memory": 1048576,
+          "CPU": 128
+        }
+      ]
+    },
+    {
+      "Type": "worker",
+      "Instances": 5,
+      "Containers": [
+        {
+          "Name": "web",
+          "Image": "remind101/acme-inc:latest",
+          "Command": ["./bin/worker"],
+          "Env": {
+            "RAILS_ENV": "production"
+          },
+          "MemoryLimit": 1073741824,
+          "CPUShare": 1024
+        }
+      ]
+    }
+  ]
+}
